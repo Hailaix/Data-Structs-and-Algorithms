@@ -15,3 +15,5 @@ const reverseInPlace = linkedList => {
     }
     linkedList.head = prev; //finally set the head to be the previous node, as current will be null at the end of the loop
 }
+
+module.exports = reverseInPlace;

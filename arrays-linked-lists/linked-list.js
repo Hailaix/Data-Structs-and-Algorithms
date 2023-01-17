@@ -159,17 +159,62 @@ class LinkedList {
   /** average(): return an average of all values in the list */
 
   average() {
-    if(this.length === 0) { //short circuit for empty list
+    if (this.length === 0) { //short circuit for empty list
       return 0;
     }
     let sum = 0;
     let currentNode = this.head;
-    while(currentNode) {
+    while (currentNode) {
       sum += currentNode.val;
       currentNode = currentNode.next;
     }
     return sum / this.length;
   }
+
+  /** pivot(val): pivots the linked list so that everything less than the pivot val 
+   * is placed before everything equal to or greater than the pivot val in the list */
+  pivot(pivot) {
+    let lesserHead;
+    let lesserTail;
+    let greaterHead;
+    let greaterTail;
+    let currentNode = this.head;
+    while (currentNode) {
+      if (currentNode.val < pivot) {
+        if (!lesserHead) { //initial insert into lesser list sets both head and tail
+          lesserHead = currentNode;
+          lesserTail = currentNode;
+        } else { //otherwise place the node at the tail
+          lesserTail.next = currentNode;
+          lesserTail = currentNode;
+        }
+      } else { //do the same if it is greater than the pivot but for the other list
+        if (!greaterHead) {
+          greaterHead = currentNode;
+          greaterTail = currentNode;
+        } else {
+          greaterTail.next = currentNode;
+          greaterTail = currentNode;
+        }
+      }
+      currentNode = currentNode.next;
+    }
+    //finally link the lesserTail and greaterHead, if they exist
+    if (lesserHead) {
+      lesserTail.next = greaterHead;
+    } else {
+      lesserHead = greaterHead;
+    }
+    //put lesserHead as the new head
+    this.head = lesserHead;
+    //and greaterTail as the new tail (or lesserTail if there is no greaterTail)
+    if (greaterTail) {
+      this.tail = greaterTail;
+    } else {
+      this.tail = lesserTail;
+    }
+  }
 }
+
 
 module.exports = LinkedList;
