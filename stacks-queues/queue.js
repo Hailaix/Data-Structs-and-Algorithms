@@ -20,7 +20,7 @@ class Queue {
   /** enqueue(val): add new value to end of the queue. Returns undefined. */
 
   enqueue(val) {
-    if(!this.first){ //initialize queue if empty
+    if (!this.first) { //initialize queue if empty
       this.first = new Node(val);
       this.last = this.first;
     } else { //otherwise add it to the end
@@ -34,13 +34,13 @@ class Queue {
    * and return its value. Should throw an error if the queue is empty. */
 
   dequeue() {
-    if(!this.size){
+    if (!this.size) {
       throw new Error("cannot remove from empty queue");
     } else {
       const val = this.first.val;
       this.first = this.first.next;
       this.size--;
-      if(!this.size) { //if we empty the queue with the removal, empty last
+      if (!this.size) { //if we empty the queue with the removal, empty last
         this.last = null;
       }
       return val;

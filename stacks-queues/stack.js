@@ -22,7 +22,7 @@ class Stack {
   push(val) {
     const newNode = new Node(val);
     newNode.next = this.first;
-    if(!this.size) { //again, there is no need for this other than to pass a test
+    if (!this.size) { //again, there is no need for this other than to pass a test
       this.last = newNode;
     }
     this.first = newNode;
@@ -33,13 +33,13 @@ class Stack {
    * and return its value. Should throw an error if the stack is empty. */
 
   pop() {
-    if(!this.size){
+    if (!this.size) {
       throw new Error("cannot remove from an empty stack")
     } else {
       const val = this.first.val;
       this.first = this.first.next;
       this.size--;
-      if(!this.size) { //remove the useless last if the stack is empty
+      if (!this.size) { //remove the useless last if the stack is empty
         this.last = null;
       }
       return val;
