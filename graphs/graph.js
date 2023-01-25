@@ -62,20 +62,64 @@ class Graph {
 
   // this function returns an array of Node values using BFS
   breadthFirstSearch(start) {
-    const visitStack = [start];
-    const visited = new Set(visitStack);
+    const visitQueue = [start];
+    const visited = new Set(visitQueue);
     const arr = [];
-    while(visitStack.length) {
-      const current = visitStack.shift();
+    while(visitQueue.length) {
+      const current = visitQueue.shift();
       arr.push(current.value);
       for(let connection of current.adjacent) {
         if(!visited.has(connection)) {
-          visitStack.push(connection);
+          visitQueue.push(connection);
           visited.add(connection);
         }
       }
     }
     return arr;
+  }
+  
+  /** Returns an array of node values in order of the shortest path between the start and the target */
+  shortestPath(start, target) {
+    //if we're looking for the start, we know the path already
+    if(target === start) {
+      return [start.value];
+    }
+    /** I'm using an object here to keep track of distances, on the (perhaps bad) assumption that 
+     *  no two nodes in a graph have the same value.
+    */
+    const distances = {
+      [target.value]: 0
+    }
+    /** First we do a bfs of the tree to assign distances of each vertex from the target */
+    const visitQueue = [target];
+    const visited = new Set(visitQueue);
+    while(visitQueue.length) {
+      const current = visitQueue.shift();
+      for(let connection of current.adjacent) {
+        if(!visited.has(connection)) { //if we find a new node
+          visitQueue.push(connection); //add it to the queue
+          visited.add(connection); //add it to the visited set so this is kept as the shortest path to it
+          //the distance to the connection node will be the distance to the current node + 1
+          distances[connection.value] = distances[current.value] + 1;
+        }
+      }
+    }
+    //if the distance to start is undefined, we cannot get to the target
+    if(distances[start.value]) {
+      const path = [start.value];
+      let current = start;
+      while(current !== target) {
+        //we check the adjacent nodes for a node with a shorter distance to the target until we get to the target
+        for(let connection of current.adjacent) {
+          if(distances[connection.value] < distances[current.value]) {
+            current = connection;
+            path.push(current.value);
+          }
+        }
+      }
+      //path should now be an array of the nodes between start and target
+      return path;
+    }
   }
 }
 
